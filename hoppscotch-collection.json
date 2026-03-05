@@ -1,0 +1,404 @@
+{
+  "v": 11,
+  "name": "ATP Auth Service",
+  "folders": [
+    {
+      "v": 11,
+      "name": "Authentication",
+      "folders": [],
+      "requests": [
+        {
+          "v": "17",
+          "name": "Register",
+          "method": "POST",
+          "endpoint": "<<base_url>>/auth/register",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"fullName\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123!\",\n  \"confirmPassword\": \"Password123!\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {},
+          "description": "Register a new user account."
+        },
+        {
+          "v": "17",
+          "name": "Login",
+          "method": "POST",
+          "endpoint": "<<base_url>>/auth/login",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "const response = JSON.parse(pw.response.body);\nif (response.access_token) {\n  pw.env.set(\"access_token\", response.access_token);\n}\nif (response.refresh_token) {\n  pw.env.set(\"refresh_token\", response.refresh_token);\n}",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123!\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {},
+          "description": "Authenticate user and get tokens."
+        },
+        {
+          "v": "17",
+          "name": "Refresh Token",
+          "method": "POST",
+          "endpoint": "<<base_url>>/auth/refresh",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "const response = JSON.parse(pw.response.body);\nif (response.access_token) {\n  pw.env.set(\"access_token\", response.access_token);\n}\nif (response.refresh_token) {\n  pw.env.set(\"refresh_token\", response.refresh_token);\n}",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"refresh_token\": \"<<refresh_token>>\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {},
+          "description": "Get a new access token using a refresh token."
+        },
+        {
+          "v": "17",
+          "name": "Logout",
+          "method": "POST",
+          "endpoint": "<<base_url>>/auth/logout",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "bearer",
+            "token": "<<access_token>>",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{}"
+          },
+          "requestVariables": [],
+          "responses": {},
+          "description": "Invalidate the current session."
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": []
+    },
+    {
+      "v": 11,
+      "name": "OTP & Verification",
+      "folders": [],
+      "requests": [
+        {
+          "v": "17",
+          "name": "Verify Email",
+          "method": "POST",
+          "endpoint": "<<base_url>>/auth/verify-email",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"email\": \"john@example.com\",\n  \"otp\": \"123456\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {},
+          "description": "Verify user email with OTP."
+        },
+        {
+          "v": "17",
+          "name": "Resend OTP",
+          "method": "POST",
+          "endpoint": "<<base_url>>/auth/resend-otp",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"email\": \"john@example.com\",\n  \"type\": \"VERIFY_EMAIL\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {},
+          "description": "Resend verification or password reset OTP."
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": []
+    },
+    {
+      "v": 11,
+      "name": "Password Management",
+      "folders": [],
+      "requests": [
+        {
+          "v": "17",
+          "name": "Forgot Password",
+          "method": "POST",
+          "endpoint": "<<base_url>>/auth/forgot-password",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"email\": \"john@example.com\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {},
+          "description": "Initiate password reset flow."
+        },
+        {
+          "v": "17",
+          "name": "Reset Password",
+          "method": "POST",
+          "endpoint": "<<base_url>>/auth/reset-password",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"email\": \"john@example.com\",\n  \"otp\": \"123456\",\n  \"newPassword\": \"NewPassword123!\",\n  \"confirmPassword\": \"NewPassword123!\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {},
+          "description": "Complete password reset using OTP."
+        },
+        {
+          "v": "17",
+          "name": "Change Password",
+          "method": "PATCH",
+          "endpoint": "<<base_url>>/auth/change-password",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "bearer",
+            "token": "<<access_token>>",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"currentPassword\": \"OldPassword123!\",\n  \"newPassword\": \"NewPassword123!\",\n  \"confirmPassword\": \"NewPassword123!\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {},
+          "description": "Change password for logged-in user."
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": []
+    },
+    {
+      "v": 11,
+      "name": "User Profile",
+      "folders": [],
+      "requests": [
+        {
+          "v": "17",
+          "name": "Get Profile",
+          "method": "GET",
+          "endpoint": "<<base_url>>/auth/me",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "bearer",
+            "token": "<<access_token>>",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {},
+          "description": "Get current user profile."
+        },
+        {
+          "v": "17",
+          "name": "Update Profile",
+          "method": "PATCH",
+          "endpoint": "<<base_url>>/auth/me",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "bearer",
+            "token": "<<access_token>>",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"fullName\": \"Jane Doe\",\n  \"avatarUrl\": \"https://example.com/avatar.jpg\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {},
+          "description": "Update user profile details."
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": []
+    },
+    {
+      "v": 11,
+      "name": "OAuth2",
+      "folders": [],
+      "requests": [
+        {
+          "v": "17",
+          "name": "Google Login",
+          "method": "GET",
+          "endpoint": "<<base_url>>/auth/google",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {},
+          "description": "Initiate Google OAuth flow."
+        },
+        {
+          "v": "17",
+          "name": "GitHub Login",
+          "method": "GET",
+          "endpoint": "<<base_url>>/auth/github",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {},
+          "description": "Initiate GitHub OAuth flow."
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": []
+    },
+    {
+      "v": 11,
+      "name": "System",
+      "folders": [],
+      "requests": [
+        {
+          "v": "17",
+          "name": "Health Check",
+          "method": "GET",
+          "endpoint": "<<base_url>>/health",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {},
+          "description": "Check service status."
+        },
+        {
+          "v": "17",
+          "name": "JWKS",
+          "method": "GET",
+          "endpoint": "<<base_url>>/auth/.well-known/jwks.json",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {},
+          "description": "Get public keys for JWT verification."
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": []
+    }
+  ],
+  "requests": [],
+  "auth": {
+    "authType": "inherit",
+    "authActive": true
+  },
+  "headers": [],
+  "variables": []
+}

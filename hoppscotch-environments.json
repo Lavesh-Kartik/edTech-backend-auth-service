@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Local",
+    "variables": [
+      {
+        "key": "base_url",
+        "value": "http://localhost:3001/api/v1"
+      },
+      {
+        "key": "access_token",
+        "value": ""
+      },
+      {
+        "key": "refresh_token",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "name": "Vercel",
+    "variables": [
+      {
+        "key": "base_url",
+        "value": "https://your-vercel-app.vercel.app/api/v1"
+      },
+      {
+        "key": "access_token",
+        "value": ""
+      },
+      {
+        "key": "refresh_token",
+        "value": ""
+      }
+    ]
+  }
+]

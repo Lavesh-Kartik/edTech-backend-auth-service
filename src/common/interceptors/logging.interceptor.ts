@@ -1,0 +1,39 @@
+import {
+  Injectable,
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+  Logger,
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
+
+@Injectable()
+export class LoggingInterceptor implements NestInterceptor {
+  private readonly logger = new Logger(LoggingInterceptor.name);
+
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const request = context.switchToHttp().getRequest();
+    const { method, url, user } = request;
+    const now = Date.now();
+    const requestId = request.header('X-Request-ID') || uuidv4();
+
+    return next.handle().pipe(
+      tap(() => {
+        const response = context.switchToHttp().getResponse();
+        const statusCode = response.statusCode;
+        const duration = Date.now() - now;
+
+        this.logger.log({
+          requestId,
+          method,
+          url,
+          statusCode,
+          duration: `${duration}ms`,
+          userId: user?.id || 'anonymous',
+        });
+      }),
+    );
+  }
+}
