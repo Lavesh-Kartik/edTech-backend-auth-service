@@ -12,6 +12,7 @@ describe('AuthModule - Tokens', () => {
   const mockAuthService = {
     refresh: jest.fn(),
     logout: jest.fn(),
+    getJwks: jest.fn(),
   };
 
   const mockRedisService = {};
@@ -73,6 +74,14 @@ describe('AuthModule - Tokens', () => {
 
       expect(await controller.logout('user-id', req)).toEqual({ message: 'Logged out successfully' });
       expect(mockAuthService.logout).toHaveBeenCalledWith('user-id', 'jti-uuid');
+    });
+  });
+
+  describe('getJwks', () => {
+    it('should return JWKS', async () => {
+      const jwks = { keys: [] };
+      mockAuthService.getJwks.mockReturnValue(jwks);
+      expect(await controller.getJwks()).toEqual(jwks);
     });
   });
 });

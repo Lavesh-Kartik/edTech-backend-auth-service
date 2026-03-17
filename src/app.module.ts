@@ -17,14 +17,14 @@ import appConfig from './config/app.config';
 import jwtConfig from './config/jwt.config';
 import redisConfig from './config/redis.config';
 import oauthConfig from './config/oauth.config';
-import sendgridConfig from './config/sendgrid.config';
+import brevoConfig from './config/brevo.config';
 import { configValidationSchema } from './config/config.validation';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, jwtConfig, redisConfig, oauthConfig, sendgridConfig],
+      load: [appConfig, jwtConfig, redisConfig, oauthConfig, brevoConfig],
       validationSchema: configValidationSchema,
     }),
     ThrottlerModule.forRoot([{

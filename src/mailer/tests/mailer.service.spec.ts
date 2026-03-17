@@ -1,22 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MailerService } from '../mailer.service';
 import { ConfigService } from '@nestjs/config';
-import * as sgMail from '@sendgrid/mail';
-
-jest.mock('@sendgrid/mail', () => ({
-  setApiKey: jest.fn(),
-  send: jest.fn(),
-}));
 
 describe('MailerService', () => {
   let service: MailerService;
 
   const mockConfigService = {
     get: jest.fn((key) => {
-      if (key === 'sendgrid.apiKey') return 'key';
-      if (key === 'sendgrid.fromEmail') return 'from@test.com';
-      if (key === 'sendgrid.fromName') return 'From Name';
-      if (key.includes('templates')) return 'template-id';
+      if (key === 'brevo.apiKey') return 'key';
+      if (key === 'brevo.fromEmail') return 'from@test.com';
+      if (key === 'brevo.fromName') return 'From Name';
+      if (key.includes('templates')) return 1;
       if (key === 'app.frontendUrl') return 'http://front';
       return null;
     }),
@@ -31,6 +25,12 @@ describe('MailerService', () => {
     }).compile();
 
     service = module.get<MailerService>(MailerService);
+
+    // Mock global fetch
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    } as any);
   });
 
   afterEach(() => {
@@ -38,29 +38,33 @@ describe('MailerService', () => {
   });
 
   it('sendVerificationEmail', async () => {
-    (sgMail.send as jest.Mock).mockResolvedValue([{}, {}]);
     await service.sendVerificationEmail('to@test.com', 'Name', '123456');
-    expect(sgMail.send).toHaveBeenCalled();
+    expect(global.fetch).toHaveBeenCalled();
   });
 
   it('sendVerificationEmail error', async () => {
-    (sgMail.send as jest.Mock).mockRejectedValue(new Error('fail'));
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      status: 400,
+      text: jest.fn().mockResolvedValue('Bad Request'),
+    });
     await service.sendVerificationEmail('to@test.com', 'Name', '123456');
-    // Should log error but not throw
+    // Should log error but not throw unhandled exception (caught internally)
+    expect(global.fetch).toHaveBeenCalled();
   });
 
   it('sendPasswordResetEmail', async () => {
     await service.sendPasswordResetEmail('to@test.com', 'Name', '123456');
-    expect(sgMail.send).toHaveBeenCalled();
+    expect(global.fetch).toHaveBeenCalled();
   });
 
   it('sendWelcomeEmail', async () => {
     await service.sendWelcomeEmail('to@test.com', 'Name');
-    expect(sgMail.send).toHaveBeenCalled();
+    expect(global.fetch).toHaveBeenCalled();
   });
 
   it('sendPasswordChangedEmail', async () => {
     await service.sendPasswordChangedEmail('to@test.com', 'Name', '1.1.1.1');
-    expect(sgMail.send).toHaveBeenCalled();
+    expect(global.fetch).toHaveBeenCalled();
   });
 });

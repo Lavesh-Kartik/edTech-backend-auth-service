@@ -9,6 +9,7 @@ export const configValidationSchema = Joi.object({
   API_PREFIX: Joi.string().default('api/v1'),
 
   DATABASE_URL: Joi.string().required(),
+  DIRECT_URL: Joi.string().required(),
 
   REDIS_URL: Joi.string().required(),
   REDIS_KEY_PREFIX: Joi.string().default('auth:'),
@@ -20,13 +21,13 @@ export const configValidationSchema = Joi.object({
   JWT_ISSUER: Joi.string().required(),
   JWT_AUDIENCE: Joi.string().required(),
 
-  SENDGRID_API_KEY: Joi.string().required(),
-  SENDGRID_FROM_EMAIL: Joi.string().required(),
-  SENDGRID_FROM_NAME: Joi.string().required(),
-  SENDGRID_TEMPLATE_VERIFY: Joi.string().required(),
-  SENDGRID_TEMPLATE_RESET: Joi.string().required(),
-  SENDGRID_TEMPLATE_WELCOME: Joi.string().required(),
-  SENDGRID_TEMPLATE_PWD_CHANGED: Joi.string().required(),
+  BREVO_API_KEY: Joi.string().required(),
+  BREVO_FROM_EMAIL: Joi.string().required(),
+  BREVO_FROM_NAME: Joi.string().required(),
+  BREVO_TEMPLATE_VERIFY: Joi.number().required(),
+  BREVO_TEMPLATE_RESET: Joi.number().required(),
+  BREVO_TEMPLATE_WELCOME: Joi.number().required(),
+  BREVO_TEMPLATE_PWD_CHANGED: Joi.number().required(),
 
   GOOGLE_CLIENT_ID: Joi.string().required(),
   GOOGLE_CLIENT_SECRET: Joi.string().required(),

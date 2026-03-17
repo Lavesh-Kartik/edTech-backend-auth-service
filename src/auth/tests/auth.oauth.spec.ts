@@ -81,4 +81,32 @@ describe('AuthModule - OAuth', () => {
       await expect(controller.googleAuthCallback(req, res)).rejects.toThrow(BadRequestException);
     });
   });
+
+  describe('githubAuthCallback', () => {
+    const req = {
+      query: { state: 'valid-state' },
+      user: { email: 'test@github.com', id: 'github-id' },
+    };
+    const res = {
+      redirect: jest.fn(),
+    } as unknown as Response;
+
+    it('T-A-44: GitHub OAuth new user → user created + JWT issued', async () => {
+      mockRedisService.exists.mockResolvedValue(true);
+      mockAuthService.validateOAuthLogin.mockResolvedValue({ access_token: 'at', refresh_token: 'rt' });
+      mockConfigService.get.mockReturnValue('http://frontend.com');
+
+      await controller.githubAuthCallback(req, res);
+
+      expect(mockRedisService.exists).toHaveBeenCalled();
+      expect(mockRedisService.del).toHaveBeenCalled();
+      expect(mockAuthService.validateOAuthLogin).toHaveBeenCalled();
+      expect(res.redirect).toHaveBeenCalledWith('http://frontend.com/auth/callback?token=at&refresh=rt');
+    });
+
+    it('should throw if state invalid', async () => {
+        mockRedisService.exists.mockResolvedValue(false);
+        await expect(controller.githubAuthCallback(req, res)).rejects.toThrow(BadRequestException);
+    });
+  });
 });
