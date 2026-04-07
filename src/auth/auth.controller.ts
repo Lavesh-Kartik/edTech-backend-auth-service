@@ -220,7 +220,7 @@ export class AuthController {
      const result = await this.authService.validateOAuthLogin(user, AuthProvider.GOOGLE);
      
      const frontendUrl = this.configService.get('app.frontendUrl');
-     res.redirect(`${frontendUrl}/auth/callback?token=${result.access_token}&refresh=${result.refresh_token}`);
+     res.redirect(`${frontendUrl}/callback?token=${result.access_token}&refresh=${result.refresh_token}`);
   }
 
   @Public()
@@ -248,6 +248,6 @@ export class AuthController {
      const result = await this.authService.validateOAuthLogin(user, AuthProvider.GITHUB);
      
      const frontendUrl = this.configService.get('app.frontendUrl');
-     res.redirect(`${frontendUrl}/auth/callback?token=${result.access_token}&refresh=${result.refresh_token}`);
+     res.redirect(`${frontendUrl}/callback?token=${result.access_token}&refresh=${result.refresh_token}`);
   }
 }

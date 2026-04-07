@@ -40,6 +40,16 @@ model User {
   lastLoginAt     DateTime?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
+  mobile          String?
+  grade           String?
+  bannerUrl       String?
+  schoolName      String?
+  age             Int?
+  totalScore      Int           @default(0)
+  rank            Int?
+  attendance      Float?
+  percentile      Float?
+  
   refreshTokens   RefreshToken[]
   otpRecords      OtpRecord[]
 

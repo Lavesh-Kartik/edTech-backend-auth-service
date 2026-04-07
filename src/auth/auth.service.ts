@@ -52,6 +52,8 @@ export class AuthService {
     const user = await this.usersService.create({
       fullName: dto.fullName,
       email: dto.email,
+      mobile: dto.mobile,
+      grade: dto.grade,
       passwordHash: hashedPassword,
       authProvider: AuthProvider.LOCAL,
     });

@@ -1,4 +1,4 @@
-import { IsString, IsEmail, Length, Matches, MaxLength } from 'class-validator';
+import { IsString, IsEmail, Length, Matches, MaxLength, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { Match } from '../../common/decorators/match.decorator';
 import { IsStrongPassword } from 'class-validator'; // Wait, IsStrongPassword is in class-validator? Yes, recent versions.
@@ -26,4 +26,12 @@ export class RegisterDto {
   @IsString()
   @Match('password', { message: 'Passwords do not match' })
   confirmPassword: string;
+
+  @IsString()
+  @IsOptional()
+  mobile?: string;
+
+  @IsString()
+  @IsOptional()
+  grade?: string;
 }

@@ -9,4 +9,19 @@ export class UpdateProfileDto {
   @IsOptional()
   @IsUrl()
   avatarUrl?: string;
+
+  @IsOptional()
+  @IsUrl()
+  bannerUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  schoolName?: string;
+
+  @IsOptional()
+  @IsString()
+  grade?: string;
+
+  @IsOptional()
+  age?: number;
 }
