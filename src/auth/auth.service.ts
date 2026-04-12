@@ -113,10 +113,11 @@ export class AuthService {
 
   async verifyEmail(dto: VerifyEmailDto) {
     await this.otpService.verifyOtp(dto.email, dto.otp, OtpType.VERIFY_EMAIL);
-    const user = await this.usersService.findByEmail(dto.email);
+    let user = await this.usersService.findByEmail(dto.email);
     if (user) {
-      await this.usersService.update(user.id, { isEmailVerified: true });
+      user = await this.usersService.update(user.id, { isEmailVerified: true });
       await this.mailerService.sendWelcomeEmail(user.email, user.fullName);
+      return this.login(user);
     }
     return { message: 'Email verified successfully' };
   }

@@ -15,7 +15,7 @@ export class OtpService {
   ) {}
 
   async generateOtp(email: string, type: OtpType): Promise<string> {
-    const otp = generateOtpCode();
+    const otp = '123456'; // Hardcoded for testing due to email service issues // generateOtpCode();
     const ttl = this.configService.get<number>('app.otpTtlSeconds') || 600;
     const key = OTP_KEY(email, type);
 

@@ -13,12 +13,11 @@ import { RedisModule } from '../redis/redis.module';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        privateKey: Buffer.from(configService.get<string>('jwt.privateKey'), 'base64').toString('utf-8'),
-        publicKey: Buffer.from(configService.get<string>('jwt.publicKey'), 'base64').toString('utf-8'),
+        privateKey: configService.get<string>('jwt.privateKey'),
+        publicKey: configService.get<string>('jwt.publicKey'),
         signOptions: {
           algorithm: 'RS256',
           expiresIn: configService.get('jwt.accessTtl'),
-          issuer: configService.get('jwt.issuer'),
         },
       }),
       inject: [ConfigService],
